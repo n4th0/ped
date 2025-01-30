@@ -1,23 +1,15 @@
-.PHONY= doc clean
-
+OPTS=-g -Wall -std=c++11
 CC=g++
-OPTIONS= -g
-DEBUG= #-D DEBUG
-LIBDIR=lib
-INCLUDEDIR=include
-#_OBJ= tporo.o tvectorporo.o  
-_OBJ= tporo.o #tvectorporo.o tlistaporo.o
-OBJ = $(patsubst %,$(LIBDIR)/%,$(_OBJ))
 
-tad:    src/tad.cpp $(OBJ)
-	$(CC) $(OPTIONS) $(DEBUG) -I$(INCLUDEDIR) src/tad.cpp $(OBJ) -o tad
+tvectorporo.o: ./lib/tvectorporo.cpp tporo.o ./include/tvectorporo.h ./include/tporo.h
+	$(CC) ./lib/tvectorporo.cpp -c
 
-$(LIBDIR)/%.o : $(LIBDIR)/%.cpp $(INCLUDEDIR)/%.h
-	$(CC) $(OPTIONS) $(DEBUG) -c -I$(INCLUDEDIR) -o $@ $<
+tporo.o: ./lib/tporo.cpp ./include/tporo.h
+	$(CC) ./lib/tporo.cpp -c
 
-doc:
-	doxygen
+test:
+	make -f ./tporo/makefile
+	make -f ./tvectorporo/makefile
 
 
-clean:
-	rm -f $(OBJ) 
+

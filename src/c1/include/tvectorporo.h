@@ -10,6 +10,7 @@ private:
   TPoro *datos;
   TPoro error;
 
+  TVectorPoro & copy(TVectorPoro &);
 public:
   TVectorPoro();
   ~TVectorPoro();

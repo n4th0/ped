@@ -2,12 +2,12 @@
 
 using namespace std;
 
-#include "tporo.h"
+#include "../include/tvectorporo.h"
 
-int
-main(void)
-{
-  TPoro a;
+int main(void) {
 
-  cout << a << endl;
+  TVectorPoro n = TVectorPoro();
+  TVectorPoro m(10);
+
+  n = m;
 }

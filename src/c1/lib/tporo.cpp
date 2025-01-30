@@ -36,7 +36,6 @@ TPoro::~TPoro() {
 TPoro &TPoro::operator=(TPoro &p) {
 
   this->~TPoro();
-
   this->x = p.x;
   this->y = p.y;
   this->volumen = p.volumen;
