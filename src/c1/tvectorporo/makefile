@@ -6,5 +6,5 @@ INCLUDE= ./include/tporo.h ./include/tvectorporo.h
 
 
 testTvectorporo.o:  $(LIB) $(INCLUDE)
-	$(foreach var,$(tests), $(CC) $(OPTS) -c tporo/tad$(var).cpp -o tporo/tad$(var).o;)
+	$(foreach var,$(tests), $(CC) $(OPTS) -c tvectorporo/tad$(var).cpp -o tvectorporo/tad$(var).o;)
 	touch testTvectorporo.o

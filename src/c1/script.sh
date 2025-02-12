@@ -6,13 +6,15 @@ if [[ $1 == "" ]]; then
   echo "opciones:"
   echo " - tporo"
   echo " - tvector"
+  echo " - tlista"
   exit 1
 fi
 
-if [[ $1 != "tporo" && $1 != "tvector" ]]; then
+if [[ $1 != "tporo" && $1 != "tvector" && $1 != "tlista" ]]; then
   echo "opciones: "
   echo "tporo"
-  echo "tvector "
+  echo "tvector"
+  echo "tlista"
   echo "aqui"
 
   exit 1
@@ -30,9 +32,16 @@ if [[ $1 == "tvector" ]]; then
   name="tvectorporo"
   num=9
   # lib="./include/tporo.h ./include/tvectorporo.h"
-
   make test >/dev/null
   src="./tvectorporo.o ./tporo.o"
+fi
+
+if [[ $1 == "tlista" ]]; then
+  name="tlistaporo"
+  num=10
+  # lib="./include/tporo.h ./include/tvectorporo.h"
+  make test >/dev/null
+  src="./tlistaporo.o ./tporo.o"
 fi
 
 for ((i = 1; i < $num; i++)); do

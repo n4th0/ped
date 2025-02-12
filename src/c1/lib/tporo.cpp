@@ -4,11 +4,22 @@
 #include <cstring>
 #include <ios>
 
+////////////////////////////////////////////////////
+/// clase TPoro
+////////////////////////////////////////////////////
+
 TPoro::TPoro() {
   this->color = NULL;
   this->volumen = 0;
   this->x = 0;
   this->y = 0;
+}
+
+TPoro::TPoro(int x, int y, double vol) {
+  this->volumen = vol;
+  this->x = x;
+  this->y = y;
+  this->color = NULL;
 }
 
 TPoro::TPoro(int x, int y, double volumen, char *color) {
@@ -18,7 +29,7 @@ TPoro::TPoro(int x, int y, double volumen, char *color) {
   this->y = y;
 }
 
-TPoro::TPoro(TPoro &p) {
+TPoro::TPoro(const TPoro &p) {
   // this->color = p.color;
   Color(p.color);
   this->volumen = p.volumen;
@@ -35,26 +46,30 @@ TPoro::~TPoro() {
 
 TPoro &TPoro::operator=(TPoro &p) {
 
-  this->~TPoro();
-  this->x = p.x;
-  this->y = p.y;
-  this->volumen = p.volumen;
-  this->Color(p.color);
+  if (this != &p) {
+    this->~TPoro();
+    this->x = p.x;
+    this->y = p.y;
+    this->volumen = p.volumen;
+    this->Color(p.color);
+  }
 
   // this = new TPoro(p.x, p.y, p.volumen, p.color);
 
   return *this;
 }
 
-bool TPoro::operator==(TPoro &p) {
-  return p.color == this->color && p.x == this->x && p.y == this->y &&
-         p.volumen == this->volumen;
+bool TPoro::operator==(const TPoro &p) {
+  if (this->color != NULL && p.color != NULL) {
+    return p.x == this->x && p.y == this->y && p.volumen == this->volumen &&
+           !strcmp(this->color, p.color);
+  } else {
+    return p.x == this->x && p.y == this->y && p.volumen == this->volumen &&
+           this->color == NULL && p.color == NULL;
+  }
 }
 
-bool TPoro::operator!=(TPoro &p) {
-  return !(p.color == this->color && p.x == this->x && p.y == this->y &&
-           p.volumen == this->volumen);
-}
+bool TPoro::operator!=(const TPoro &p) { return !(*this == p); }
 
 void TPoro::Posicion(int x, int y) {
   this->x = x;
@@ -64,7 +79,12 @@ void TPoro::Posicion(int x, int y) {
 void TPoro::Volumen(double vol) { this->volumen = vol; }
 
 void TPoro::Color(char *col) {
+  if (this->color != NULL) {
+    delete[] this->color;
+  }
+
   if (col != NULL) {
+
     int size = (int)strlen(col);
     this->color = new char[size + 1];
 
@@ -73,21 +93,22 @@ void TPoro::Color(char *col) {
     }
 
     color[size] = '\0';
+    // delete[] col;
 
   } else {
     color = NULL;
   }
 }
 
-int TPoro::PosicionX() { return x; }
+int TPoro::PosicionX() const { return x; }
 
-int TPoro::PosicionY() { return y; }
+int TPoro::PosicionY() const { return y; }
 
-double TPoro::Volumen() { return volumen; }
+double TPoro::Volumen() const { return volumen; }
 
-char *TPoro::Color() { return this->color; }
+char *TPoro::Color() const { return this->color; }
 
-bool TPoro::EsVacio() {
+bool TPoro::EsVacio() const {
   return this->x == 0 && this->y == 0 && this->color == NULL;
 }
 

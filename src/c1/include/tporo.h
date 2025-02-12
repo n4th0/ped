@@ -7,19 +7,20 @@ class TPoro {
 public:
   TPoro();
   TPoro(int, int, double, char *);
-  TPoro(TPoro &);
+  TPoro(int, int, double); 
+  TPoro(const TPoro &);
   ~TPoro();
   TPoro &operator=(TPoro &);
-  bool operator==(TPoro &);
-  bool operator!=(TPoro &);
+  bool operator==(const TPoro &);
+  bool operator!=(const TPoro &);
   void Posicion(int, int);
   void Volumen(double);
   void Color(char *);
-  int PosicionX();
-  int PosicionY();
-  double Volumen();
-  char *Color();
-  bool EsVacio();
+  int PosicionX() const;
+  int PosicionY() const;
+  double Volumen() const;
+  char *Color() const;
+  bool EsVacio() const;
 
 private:
   int x = 0;
@@ -27,7 +28,7 @@ private:
   double volumen = 0;
   char *color = NULL;
 
-friend std::ostream &operator<<(std::ostream &, TPoro &);
+  friend std::ostream &operator<<(std::ostream &, TPoro &);
 };
 
 #endif // !T_PORO_H

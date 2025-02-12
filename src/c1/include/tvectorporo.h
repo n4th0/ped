@@ -18,14 +18,14 @@ public:
   TVectorPoro(TVectorPoro &);
   TVectorPoro &operator=(TVectorPoro &);
 
-  bool operator==(TVectorPoro &);
-  bool operator!=(TVectorPoro &);
+  bool operator==(TVectorPoro &) const;
+  bool operator!=(TVectorPoro &) const;
 
   TPoro &operator[](int);
   TPoro operator[](int) const;
 
-  int Longitud();
-  int Cantidad();
+  int Longitud() const;
+  int Cantidad() const;
   bool Redimensionar(int);
 
   friend std::ostream &operator<<(std::ostream &, TVectorPoro &);

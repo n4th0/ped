@@ -2,7 +2,11 @@
 #include <cstddef>
 #include <iostream>
 
-TVectorPoro::TVectorPoro() {
+////////////////////////////////////////////////////
+/// clase TVectorPoro
+////////////////////////////////////////////////////
+
+TVectorPoro::TVectorPoro() : error() {
   this->datos = NULL;
   this->dimension = 0;
 }
@@ -17,7 +21,7 @@ TVectorPoro::~TVectorPoro() {
   this->dimension = 0;
 }
 
-TVectorPoro::TVectorPoro(int size) {
+TVectorPoro::TVectorPoro(int size) : error() {
   if (size <= 0) {
     this->datos = NULL;
     this->dimension = 0;
@@ -64,7 +68,7 @@ TVectorPoro &TVectorPoro::operator=(TVectorPoro &vecporo) {
   return *this;
 }
 
-bool TVectorPoro::operator==(TVectorPoro &vecporo) {
+bool TVectorPoro::operator==(TVectorPoro &vecporo) const {
   if (this->dimension != vecporo.dimension) {
     return false;
   }
@@ -78,15 +82,15 @@ bool TVectorPoro::operator==(TVectorPoro &vecporo) {
   return true;
 }
 
-bool TVectorPoro::operator!=(TVectorPoro &vecporo) {
+bool TVectorPoro::operator!=(TVectorPoro &vecporo) const {
   return !(*this == vecporo);
 }
 
 TPoro &TVectorPoro::operator[](int pos) {
 
-  // if (pos <= 0 || pos > this->dimension) {
-  //   return this->error;
-  // }
+  if (pos <= 0 || pos > this->dimension) {
+    return this->error;
+  }
 
   pos--;
 
@@ -95,7 +99,7 @@ TPoro &TVectorPoro::operator[](int pos) {
 
 TPoro TVectorPoro::operator[](int pos) const {
   if (pos <= 0 || pos > this->dimension) {
-    // return this->error; // TODO pq me da error?
+    return this->error;
   }
 
   pos--;
@@ -103,13 +107,13 @@ TPoro TVectorPoro::operator[](int pos) const {
   return datos[pos];
 }
 
-int TVectorPoro::Longitud() { return this->dimension; }
+int TVectorPoro::Longitud() const { return this->dimension; }
 
-int TVectorPoro::Cantidad() {
+int TVectorPoro::Cantidad() const {
   int ocupadas = 0;
 
   for (size_t i = 0; i < dimension; i++) {
-    if (this->datos[i] == error) {
+    if (this->datos[i] == (TPoro)error) {
       break;
     }
     ocupadas++;
