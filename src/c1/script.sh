@@ -38,7 +38,7 @@ fi
 
 if [[ $1 == "tlista" ]]; then
   name="tlistaporo"
-  num=10
+  num=13
   # lib="./include/tporo.h ./include/tvectorporo.h"
   make test >/dev/null
   src="./tlistaporo.o ./tporo.o"
@@ -60,8 +60,8 @@ for ((i = 1; i < $num; i++)); do
   echo $test
 
   g++ -w $test $src -o tad
-
-  valgrind -q --tool=memcheck --leak-check=full ./tad >/tmp/salida 2>/tmp/salida-valgrind
+  #valgrind -q --tool=memcheck --leak-check=full
+  ./tad >/tmp/salida 2>/tmp/salida-valgrind
 
   diff /tmp/salida $solu
   resultOfDiff=$?

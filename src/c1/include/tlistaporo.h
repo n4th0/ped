@@ -6,6 +6,9 @@
 using namespace std;
 
 class TListaNodo {
+  friend class TListaPosicion;
+  friend class TListaPoro;
+
 private:
   TPoro e;
   TListaNodo *anterior;
@@ -19,22 +22,28 @@ public:
 };
 
 class TListaPosicion {
+  friend class TListaNodo;
+  friend class TListaPoro;
+
 private:
   TListaNodo *pos;
 
 public:
   TListaPosicion();
-  TListaPosicion(TListaPosicion &);
+  TListaPosicion(const TListaPosicion &);
   ~TListaPosicion();
-  TListaPosicion &operator=(TListaPosicion &);
+  TListaPosicion &operator=(const TListaPosicion &);
 
   bool operator==(TListaPosicion &) const;
-  TListaPosicion Anterior();
-  TListaPosicion Siguiente();
+  TListaPosicion Anterior() const;
+  TListaPosicion Siguiente() const;
   bool EsVacia() const;
 };
 
 class TListaPoro {
+  friend class TListaNodo;
+  friend class TListaPosicion;
+
 private:
   TListaNodo *primero;
   TListaNodo *ultimo;
@@ -45,22 +54,22 @@ public:
   ~TListaPoro();
   TListaPoro &operator=(TListaPoro &);
 
-  bool operator==(TListaPoro &) const;
+  bool operator==(const TListaPoro &) const;
   TListaPoro operator+(TListaPoro &);
   TListaPoro operator-(TListaPoro &);
   bool EsVacia() const;
-  bool Insertar(TPoro &);
-  bool Borrar(TPoro &);
-  bool Borrar(TListaPosicion &);
-  TPoro Obtener(TListaPosicion &);
-  bool Buscar(TPoro &) const;
+  bool Insertar(const TPoro &);
+  bool Borrar(const TPoro &);
+  bool Borrar(const TListaPosicion &);
+  TPoro Obtener(const TListaPosicion &) const;
+  bool Buscar(const TPoro &) const;
   int Longitud() const;
   TListaPosicion Primera() const;
   TListaPosicion Ultima() const;
 
   TListaPoro ExtraerRango(int n1, int n2);
 
-  friend ostream &operator<<(ostream &, TListaPoro &);
+  friend ostream &operator<<(ostream &, const TListaPoro &);
 };
 
 #endif

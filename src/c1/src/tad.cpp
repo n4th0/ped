@@ -1,29 +1,18 @@
-#include <cstdlib>
+#include "../include/tlistaporo.h"
+#include "../include/tporo.h"
 #include <iostream>
 
 using namespace std;
 
-#include "../include/tporo.h"
-#include "../include/tvectorporo.h"
-
 int main(void) {
-  TPoro p1(0, 0, 0, "Rojo");
-  TPoro p2(2, 0, 0, "azul");
-  TPoro p3(4, 0, 0, "granate");
-  TPoro p4(1, 0, 0, "verde");
-  TVectorPoro v(10);
+  TPoro p(1, 1, 1), q(2, 2, 2), r(3, 3, 3);
+  TListaPoro a;
+  a.Insertar(p);
 
-  v[0] = p1; // error
+  cout << a.Obtener(a.Primera()) << endl;
 
-  v[1] = p2;
-  v[2] = p3;
-  v[2] = p3;
-  v[2] = p3;
-  v[2] = p3;
+  a.Insertar(q);
+  a.Insertar(r);
 
-  // cout << v[100] << endl;
-
-  p4.Color("amarillo");
-
-  cout << v << endl;
+  cout << a << endl;
 }

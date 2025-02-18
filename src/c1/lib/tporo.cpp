@@ -44,7 +44,7 @@ TPoro::~TPoro() {
   }
 }
 
-TPoro &TPoro::operator=(TPoro &p) {
+TPoro &TPoro::operator=(const TPoro &p) {
 
   if (this != &p) {
     this->~TPoro();
@@ -112,14 +112,15 @@ bool TPoro::EsVacio() const {
   return this->x == 0 && this->y == 0 && this->color == NULL;
 }
 
-std::ostream &operator<<(std::ostream &os, TPoro &poro) {
+std::ostream &operator<<(std::ostream &os, const TPoro &poro) {
   if (!poro.EsVacio()) {
     os.setf(std::ios::fixed);
     os.precision(2);
-    os << "(" << poro.x << ", " << poro.y << ") " << poro.volumen << " ";
+    os << "(" << poro.PosicionX() << ", " << poro.PosicionY() << ") "
+       << poro.Volumen() << " ";
 
-    if (poro.color != NULL)
-      os << poro.color;
+    if (poro.Color() != NULL)
+      os << poro.Color();
     else
       os << "-";
 
