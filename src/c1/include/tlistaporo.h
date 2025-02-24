@@ -34,7 +34,7 @@ public:
   ~TListaPosicion();
   TListaPosicion &operator=(const TListaPosicion &);
 
-  bool operator==(TListaPosicion &) const;
+  bool operator==(const TListaPosicion &) const;
   TListaPosicion Anterior() const;
   TListaPosicion Siguiente() const;
   bool EsVacia() const;
@@ -50,13 +50,13 @@ private:
 
 public:
   TListaPoro();
-  TListaPoro(TListaPoro &);
+  TListaPoro(const TListaPoro &);
   ~TListaPoro();
   TListaPoro &operator=(TListaPoro &);
 
   bool operator==(const TListaPoro &) const;
-  TListaPoro operator+(TListaPoro &);
-  TListaPoro operator-(TListaPoro &);
+  TListaPoro operator+(const TListaPoro &) const;
+  TListaPoro operator-(const TListaPoro &) const;
   bool EsVacia() const;
   bool Insertar(const TPoro &);
   bool Borrar(const TPoro &);
@@ -66,6 +66,8 @@ public:
   int Longitud() const;
   TListaPosicion Primera() const;
   TListaPosicion Ultima() const;
+
+  void debug();
 
   TListaPoro ExtraerRango(int n1, int n2);
 

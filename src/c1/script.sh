@@ -20,6 +20,8 @@ if [[ $1 != "tporo" && $1 != "tvector" && $1 != "tlista" ]]; then
   exit 1
 fi
 
+make all
+
 if [[ $1 == "tporo" ]]; then
   num=11
   name="tporo"
@@ -60,8 +62,8 @@ for ((i = 1; i < $num; i++)); do
   echo $test
 
   g++ -w $test $src -o tad
-  #valgrind -q --tool=memcheck --leak-check=full
-  ./tad >/tmp/salida 2>/tmp/salida-valgrind
+  valgrind -q --tool=memcheck ./tad >/tmp/salida 2>/tmp/salida-valgrind
+  # --leak-check=full
 
   diff /tmp/salida $solu
   resultOfDiff=$?

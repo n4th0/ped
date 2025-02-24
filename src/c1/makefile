@@ -3,6 +3,8 @@ CC=g++
 
 	#valgrind -q --tool=memcheck --leak-check=full ./tad
 
+all: tlistaporo.o tvectorporo.o tporo.o
+
 tlistaporo.o: ./lib/tlistaporo.cpp tporo.o ./include/tlistaporo.h ./include/tporo.h
 	$(CC)  ./lib/tlistaporo.cpp -c
 
@@ -21,8 +23,10 @@ tad:  tporo.o tlistaporo.o ./src/tad.cpp
 	$(CC) $(OPTS) tporo.o tlistaporo.o ./src/tad.cpp -o tad
 
 run:  ./src/tad.cpp tad
-	valgrind -q --tool=memcheck --leak-check=full ./tad
+	valgrind -q --tool=memcheck ./tad
+	# ./tad
 
+ #--track-origins=yes --leak-check=full
 
 clean:
 	rm -rf tad 

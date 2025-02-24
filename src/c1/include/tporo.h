@@ -13,7 +13,7 @@ public:
   TPoro(const TPoro &);
   ~TPoro();
   TPoro &operator=(const TPoro &);
-  bool operator==(const TPoro &);
+  bool operator==(const TPoro &) const;
   bool operator!=(const TPoro &);
   void Posicion(int, int);
   void Volumen(double);

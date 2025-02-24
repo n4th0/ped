@@ -59,7 +59,7 @@ TPoro &TPoro::operator=(const TPoro &p) {
   return *this;
 }
 
-bool TPoro::operator==(const TPoro &p) {
+bool TPoro::operator==(const TPoro &p) const {
   if (this->color != NULL && p.color != NULL) {
     return p.x == this->x && p.y == this->y && p.volumen == this->volumen &&
            !strcmp(this->color, p.color);

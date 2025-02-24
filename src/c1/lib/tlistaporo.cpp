@@ -1,4 +1,5 @@
 #include "../include/tlistaporo.h"
+#include <cstddef>
 
 ////////////////////////////////////////////////////
 /// clase TListaNodo
@@ -41,21 +42,19 @@ TListaPosicion &TListaPosicion::operator=(const TListaPosicion &pos) {
   return *this;
 }
 
-bool TListaPosicion::operator==(TListaPosicion &pos) const {
+bool TListaPosicion::operator==(const TListaPosicion &pos) const {
   return this->pos == pos.pos;
 }
 
 TListaPosicion TListaPosicion::Anterior() const {
-  TListaNodo p = *pos;
   TListaPosicion tp;
-  tp.pos = p.anterior;
+  tp.pos = pos->anterior;
   return tp;
 }
 
 TListaPosicion TListaPosicion::Siguiente() const {
-  TListaNodo p = *pos;
   TListaPosicion tp;
-  tp.pos = p.siguiente;
+  tp.pos = pos->siguiente;
   return tp;
 }
 
@@ -66,20 +65,21 @@ bool TListaPosicion::EsVacia() const { return pos == NULL; }
 ////////////////////////////////////////////////////
 
 TListaPoro::TListaPoro() { primero = ultimo = NULL; }
-TListaPoro::TListaPoro(TListaPoro &lista) {
+TListaPoro::TListaPoro(const TListaPoro &lista) {
+  primero = ultimo = NULL;
+
   if (lista.EsVacia()) {
     primero = lista.primero; // serán null
     ultimo = lista.ultimo;
     return;
   }
 
-  TListaNodo it = *lista.primero;
+  TListaNodo *it = lista.primero;
 
-  while (it.siguiente != NULL) {
-    this->Insertar(it.e); // Insertar hará copia profunda de tporo
-                          // También se encargará de la gestion de
-                          //  punteros
-    it = *it.siguiente;
+  while (it->siguiente != NULL) {
+    this->Insertar(it->e);
+
+    it = it->siguiente;
   }
 
   this->Insertar(lista.ultimo->e);
@@ -123,20 +123,73 @@ TListaPoro &TListaPoro::operator=(TListaPoro &lista) {
 
 bool TListaPoro::EsVacia() const { return NULL == primero && ultimo == NULL; }
 
-// TODO comprobar uno a uno
 bool TListaPoro::operator==(const TListaPoro &lista) const {
-  return primero == lista.primero && ultimo == lista.ultimo;
+  TListaPosicion it1 = this->Primera();
+  TListaPosicion it2 = lista.Primera();
+
+  // TODO optimizar
+  if (this->Longitud() != lista.Longitud()) {
+    return false;
+  }
+
+  while (!it1.EsVacia() && !it2.EsVacia()) {
+    if (it1.pos->e != it2.pos->e) {
+      return false;
+    }
+
+    it1 = it1.Siguiente();
+    it2 = it2.Siguiente();
+  }
+
+  return true;
 }
 
-TListaPoro operator+(TListaPoro &lista) { return lista; }
-TListaPoro operator-(TListaPoro &lista) { return lista; }
+TListaPoro TListaPoro::operator+(const TListaPoro &lista) const {
+  TListaPoro l = TListaPoro(lista);
+
+  if (this->EsVacia()) {
+    return lista;
+  }
+  if (lista.EsVacia()) {
+    return *this;
+  }
+
+  TListaNodo *it = this->primero;
+
+  while (it->siguiente != NULL) {
+    l.Insertar(it->e);
+    it = it->siguiente;
+  }
+
+  l.Insertar(it->e);
+
+  return l;
+}
+
+TListaPoro TListaPoro::operator-(const TListaPoro &lista) const {
+  if (this->EsVacia() || lista.EsVacia()) {
+    return *this;
+  }
+
+  TListaPoro l(*this);
+  TListaNodo *it = lista.primero;
+
+  while (it->siguiente != NULL) {
+    l.Borrar(it->e);
+    it = it->siguiente;
+  }
+  l.Borrar(it->e);
+
+  return l;
+}
 
 bool TListaPoro::Insertar(const TPoro &poro) {
 
   if (this->EsVacia()) {
-    this->primero = new TListaNodo();
-    this->primero->e = poro;
-    this->ultimo = this->primero;
+    TListaNodo *n = new TListaNodo();
+    n->e = poro;
+    this->ultimo = n;
+    this->primero = n;
     return true;
   }
 
@@ -167,42 +220,72 @@ bool TListaPoro::Insertar(const TPoro &poro) {
   } else if (this->ultimo->e.Volumen() <= poro.Volumen()) {
     TListaNodo *n = new TListaNodo();
     n->e = poro;
+    TListaNodo *ult = this->ultimo;
 
-    n->anterior = this->ultimo;
-    this->ultimo->siguiente = n;
+    ult->siguiente = n;
+    n->anterior = ult;
     this->ultimo = n;
+
     return true;
   }
 
-  while (poro.Volumen() < p->e.Volumen()) {
+  while (p->e.Volumen() <= poro.Volumen()) {
     p = p->siguiente;
   }
 
-  if (p->e.Volumen() == poro.Volumen()) {
-    p = p->siguiente;
-  }
+  // if (poro.Volumen() == p->e.Volumen()) {
+  //   p = p->siguiente;
+  // }
 
   TListaNodo *nw = new TListaNodo();
   nw->e = poro;
+  cout << p->e << endl;
 
-  TListaNodo *s = p->siguiente;
+  TListaNodo *s = p;
+  TListaNodo *ant = p->anterior;
 
-  nw->siguiente = s;
-  nw->anterior = p;
-
-  p->siguiente = nw;
   s->anterior = nw;
+  ant->siguiente = nw;
+
+  nw->anterior = ant;
+  nw->siguiente = s;
 
   return true;
 }
 
 bool TListaPoro::Borrar(const TPoro &poro) {
 
-  TListaNodo *p = primero;
+  if (this->EsVacia()) {
+    return false;
+  }
 
-  while (p->siguiente != NULL) { // && p->e.Volumen() <= poro.Volumen()
-                                 // posible optimización
+  // caso en el que pasa a ser vacía
+  if (poro == primero->e && primero == ultimo) {
+    primero->~TListaNodo();
+    ultimo = primero = NULL;
+    return true;
+  }
+
+  TListaNodo *p = primero;
+  if (poro == primero->e) { // es el primero
+    this->primero = p->siguiente;
+    this->primero->anterior = NULL;
+    p->~TListaNodo();
+    return true;
+  }
+
+  if (poro == ultimo->e) { // es el ultimo
+
+    p = ultimo;
+    this->ultimo = p->anterior;
+    this->ultimo->siguiente = NULL;
+    p->~TListaNodo();
+    return true;
+  }
+
+  while (p->siguiente != NULL && p->e.Volumen() <= poro.Volumen()) {
     if (p->e == poro) {
+
       TListaNodo *anterior = p->anterior;
       TListaNodo *siguiente = p->siguiente;
 
@@ -217,24 +300,20 @@ bool TListaPoro::Borrar(const TPoro &poro) {
     p = p->siguiente;
   }
 
-  if (p->e == poro) { // TODO hacer la comprobación si es al final/al principio
-    TListaNodo *anterior = p->anterior;
-    TListaNodo *siguiente = p->siguiente;
-
-    // cout << "llego" << endl;
-    anterior->siguiente = siguiente;
-    siguiente->anterior = anterior;
-
-    p->~TListaNodo();
-
-    return true;
-  }
+  // if (p->e == poro) { // no se si esto es necesario, no lo es
+  //   TListaNodo *anterior = p->anterior;
+  //   TListaNodo *siguiente = p->siguiente;
+  //   anterior->siguiente = siguiente;
+  //   siguiente->anterior = anterior;
+  //   p->~TListaNodo();
+  //   return true;
+  // }
 
   return false;
 }
 
 bool TListaPoro::Borrar(const TListaPosicion &pos) {
-  return this->Borrar((*pos.pos).e);
+  return this->Borrar(pos.pos->e);
 }
 
 TPoro TListaPoro::Obtener(const TListaPosicion &posicion) const {
@@ -246,14 +325,25 @@ TPoro TListaPoro::Obtener(const TListaPosicion &posicion) const {
 }
 
 bool TListaPoro::Buscar(const TPoro &poro) const {
+  if (this->EsVacia()) {
+    return false;
+  }
+
   TListaNodo *p = this->primero;
 
-  while (p->siguiente != NULL && p->e.Volumen() <= poro.Volumen()) {
+  while (p->siguiente != NULL &&
+         p->e.Volumen() <=
+             poro.Volumen()) { // && p->e.Volumen() <= poro.Volumen()
+
     if (p->e == poro) {
       return true;
     }
 
     p = p->siguiente;
+  }
+
+  if (p->e == poro) {
+    return true;
   }
 
   return false;
@@ -295,7 +385,59 @@ TListaPosicion TListaPoro::Ultima() const {
   }
 }
 
-TListaPoro TListaPoro::ExtraerRango(int n1, int n2) { return *this; }
+// TODO
+TListaPoro TListaPoro::ExtraerRango(int n1, int n2) {
+  if (n2 >= this->Longitud()) {
+    n2 = this->Longitud();
+  }
+  if (n1 <= 0) {
+    n1 = 1;
+  }
+
+  if (n1 == n2) { // caso en el que se extrae uno y se devuelve
+    int count = 1;
+    TListaPosicion it = this->Primera();
+    while (!it.EsVacia() && count != n1) {
+      it = it.Siguiente();
+      count++;
+    }
+
+    TListaPoro l = TListaPoro();
+    l.Insertar(this->Obtener(it));
+    return l;
+  }
+
+  if (n1 > n2) {
+    return TListaPoro();
+  }
+
+  int count = 1;
+  TListaPosicion it = this->Primera();
+  TListaPoro l = TListaPoro();
+  while (!it.EsVacia() && count <= n2) {
+    it = it.Siguiente(); // esto va a estar muy raro
+    if (n1 <= count) {
+      l.Insertar(this->Obtener(it));
+      this->Borrar(it.Anterior());
+    }
+    count++;
+  }
+
+  return l;
+}
+
+void TListaPoro::debug() {
+  if (this->EsVacia()) {
+    return;
+  }
+
+  TListaNodo *n = primero;
+
+  while (n->siguiente != NULL) {
+    cout << n->e << endl;
+  }
+  cout << n->e << endl;
+}
 
 ostream &operator<<(ostream &os, const TListaPoro &lista) {
   if (lista.EsVacia()) {
