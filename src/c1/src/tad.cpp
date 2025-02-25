@@ -71,7 +71,7 @@ int main(void) {
   cout << a << endl;
 
   cout << "aqui" << endl;
-  cout << a.ExtraerRango(1, 2) << endl;
+  cout << a.ExtraerRango(2, 2) << endl;
   cout << a << endl;
   // if (b.Buscar(a.Obtener(a.Primera()))) {
   //   cout << "encuentra" << endl;

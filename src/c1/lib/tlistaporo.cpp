@@ -385,11 +385,11 @@ TListaPosicion TListaPoro::Ultima() const {
   }
 }
 
-// TODO
 TListaPoro TListaPoro::ExtraerRango(int n1, int n2) {
   if (n2 >= this->Longitud()) {
     n2 = this->Longitud();
   }
+
   if (n1 <= 0) {
     n1 = 1;
   }
@@ -404,23 +404,36 @@ TListaPoro TListaPoro::ExtraerRango(int n1, int n2) {
 
     TListaPoro l = TListaPoro();
     l.Insertar(this->Obtener(it));
+    this->Borrar(this->Obtener(it));
     return l;
   }
 
-  if (n1 > n2) {
+  if (n1 > n2) { // caso en el que no abarque ninguno
     return TListaPoro();
   }
 
   int count = 1;
-  TListaPosicion it = this->Primera();
+  TListaPosicion it2, it = this->Primera();
   TListaPoro l = TListaPoro();
+  bool borrado = false;
+
   while (!it.EsVacia() && count <= n2) {
-    it = it.Siguiente(); // esto va a estar muy raro
+
+    cout << this->Obtener(it) << endl;
     if (n1 <= count) {
       l.Insertar(this->Obtener(it));
-      this->Borrar(it.Anterior());
+      it2 = it.Siguiente();
+      this->Borrar(it);
+      borrado = true;
     }
+
     count++;
+
+    if (!borrado) {
+      it = it.Siguiente(); // esto va a estar muy raro
+    } else {
+      it = it2;
+    }
   }
 
   return l;
