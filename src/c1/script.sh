@@ -62,7 +62,7 @@ for ((i = 1; i < $num; i++)); do
   echo $test
 
   g++ -w $test $src -o tad
-  valgrind -q --tool=memcheck ./tad >/tmp/salida 2>/tmp/salida-valgrind
+  valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes ./tad >/tmp/salida 2>/tmp/salida-valgrind
   # --leak-check=full
 
   diff /tmp/salida $solu

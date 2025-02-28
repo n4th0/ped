@@ -52,7 +52,7 @@ public:
   TListaPoro();
   TListaPoro(const TListaPoro &);
   ~TListaPoro();
-  TListaPoro &operator=(TListaPoro &);
+  TListaPoro &operator=(const TListaPoro &);
 
   bool operator==(const TListaPoro &) const;
   TListaPoro operator+(const TListaPoro &) const;

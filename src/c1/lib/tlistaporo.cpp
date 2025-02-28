@@ -48,13 +48,21 @@ bool TListaPosicion::operator==(const TListaPosicion &pos) const {
 
 TListaPosicion TListaPosicion::Anterior() const {
   TListaPosicion tp;
-  tp.pos = pos->anterior;
+  if (pos != NULL) {
+    tp.pos = pos->anterior;
+  } else {
+    return TListaPosicion();
+  }
   return tp;
 }
 
 TListaPosicion TListaPosicion::Siguiente() const {
   TListaPosicion tp;
-  tp.pos = pos->siguiente;
+  if (pos != NULL) {
+    tp.pos = pos->siguiente;
+  } else {
+    return TListaPosicion();
+  }
   return tp;
 }
 
@@ -69,8 +77,6 @@ TListaPoro::TListaPoro(const TListaPoro &lista) {
   primero = ultimo = NULL;
 
   if (lista.EsVacia()) {
-    primero = lista.primero; // serán null
-    ultimo = lista.ultimo;
     return;
   }
 
@@ -91,11 +97,21 @@ TListaPoro::~TListaPoro() {
     return;
   }
 
-  TListaNodo it = *this->primero;
+  TListaNodo *it = this->primero;
+  TListaNodo *it2;
 
-  while (it.siguiente != NULL) {
-    this->Borrar(it.e);
-    it = *it.siguiente;
+  while (it->siguiente != NULL) {
+    // this->Borrar(it.e);
+
+    it2 = it->siguiente;
+    if (it != NULL) {
+      delete it;
+    }
+    it = it2;
+  }
+
+  if (it != NULL) {
+    delete it;
   }
 
   // this->Borrar(it.e);
@@ -103,12 +119,12 @@ TListaPoro::~TListaPoro() {
   primero = ultimo = NULL;
 }
 
-TListaPoro &TListaPoro::operator=(TListaPoro &lista) {
+TListaPoro &TListaPoro::operator=(const TListaPoro &lista) {
 
   this->~TListaPoro();
 
-  primero = lista.primero;
-  ultimo = lista.ultimo;
+  // primero = lista.primero;
+  // ultimo = lista.ultimo;
 
   TListaNodo it = *lista.primero;
 
@@ -185,41 +201,69 @@ TListaPoro TListaPoro::operator-(const TListaPoro &lista) const {
 
 bool TListaPoro::Insertar(const TPoro &poro) {
 
+  if (this->Buscar(poro)) {
+    return false;
+  }
+
+  TListaNodo *n = new TListaNodo();
+  n->e = poro;
+
   if (this->EsVacia()) {
-    TListaNodo *n = new TListaNodo();
-    n->e = poro;
     this->ultimo = n;
     this->primero = n;
     return true;
   }
 
-  if (this->Buscar(poro)) {
-    return false;
-  }
-
   TListaNodo *p = primero;
+  /*
+   * TODO
+   * a la hora de insertar tporos que tengan el mimso valor
+   * de volumen, debe estar al final o despues del primero?
+   *
+   * se inserta "blanco"
+   *
+   * Justo despues:
+   * ((1, 1) 1.00 rojo (1, 1) 1.00 azul)
+   * ((1, 1) 1.00 rojo (1, 1) 1.00 blanco (1, 1) 1.00 azul)
+   *
+   * Despues de todos:
+   * ((1, 1) 1.00 rojo (1, 1) 1.00 azul)
+   * ((1, 1) 1.00 rojo (1, 1) 1.00 azul (1, 1) 1.00 blanco)
+   *
+   * */
+  // int longitud = Longitud();
 
   // inserto al principio
-  if (p->e.Volumen() >= poro.Volumen()) {
-    TListaNodo *n = new TListaNodo();
-    n->e = poro;
+  if (p->e.Volumen() > poro.Volumen()) { // poner el igual y descomentar
+    //                                      el resto del if
 
     if (p->e.Volumen() > poro.Volumen()) {
+
+      // TListaNodo * ap = this->primero;
+      // n->siguiente = ap;
+      // ap->anterior = n;
+      // this->primero = n;
 
       this->primero->anterior = n;
       n->siguiente = this->primero;
       this->primero = n;
 
-    } else { // igualdad
-      this->primero->siguiente = n;
-      n->anterior = this->primero;
-      this->ultimo = n;
+      // } else { // igualdad
+      //   if (longitud == 1) {
+      //     this->primero->siguiente = n;
+      //     n->anterior = this->primero;
+      //     this->ultimo = n;
+      //   } else {
+      //     TListaNodo *sig = this->primero->siguiente;
+      //     sig->anterior = n;
+      //     this->primero->siguiente = n;
+      //     n->anterior = this->primero;
+      //     n->siguiente = sig;
+      //   }
     }
     return true;
 
   } else if (this->ultimo->e.Volumen() <= poro.Volumen()) {
-    TListaNodo *n = new TListaNodo();
-    n->e = poro;
     TListaNodo *ult = this->ultimo;
 
     ult->siguiente = n;
@@ -229,26 +273,19 @@ bool TListaPoro::Insertar(const TPoro &poro) {
     return true;
   }
 
+  // TODO si es el primero quitar el igual y poner un if despues
   while (p->e.Volumen() <= poro.Volumen()) {
     p = p->siguiente;
   }
 
-  // if (poro.Volumen() == p->e.Volumen()) {
-  //   p = p->siguiente;
-  // }
-
-  TListaNodo *nw = new TListaNodo();
-  nw->e = poro;
-  cout << p->e << endl;
-
   TListaNodo *s = p;
   TListaNodo *ant = p->anterior;
 
-  s->anterior = nw;
-  ant->siguiente = nw;
+  s->anterior = n;
+  ant->siguiente = n;
 
-  nw->anterior = ant;
-  nw->siguiente = s;
+  n->anterior = ant;
+  n->siguiente = s;
 
   return true;
 }
@@ -261,7 +298,8 @@ bool TListaPoro::Borrar(const TPoro &poro) {
 
   // caso en el que pasa a ser vacía
   if (poro == primero->e && primero == ultimo) {
-    primero->~TListaNodo();
+    // primero->~TListaNodo();
+    delete primero;
     ultimo = primero = NULL;
     return true;
   }
@@ -270,7 +308,8 @@ bool TListaPoro::Borrar(const TPoro &poro) {
   if (poro == primero->e) { // es el primero
     this->primero = p->siguiente;
     this->primero->anterior = NULL;
-    p->~TListaNodo();
+    delete p;
+    // p->~TListaNodo();
     return true;
   }
 
@@ -279,7 +318,8 @@ bool TListaPoro::Borrar(const TPoro &poro) {
     p = ultimo;
     this->ultimo = p->anterior;
     this->ultimo->siguiente = NULL;
-    p->~TListaNodo();
+    delete p;
+    // p->~TListaNodo();
     return true;
   }
 
@@ -292,8 +332,8 @@ bool TListaPoro::Borrar(const TPoro &poro) {
       anterior->siguiente = siguiente;
       siguiente->anterior = anterior;
 
-      p->~TListaNodo();
-
+      delete p;
+      // p->~TListaNodo();
       return true;
     }
 
@@ -331,10 +371,7 @@ bool TListaPoro::Buscar(const TPoro &poro) const {
 
   TListaNodo *p = this->primero;
 
-  while (p->siguiente != NULL &&
-         p->e.Volumen() <=
-             poro.Volumen()) { // && p->e.Volumen() <= poro.Volumen()
-
+  while (p->siguiente != NULL && p->e.Volumen() <= poro.Volumen()) {
     if (p->e == poro) {
       return true;
     }

@@ -5,79 +5,86 @@
 using namespace std;
 
 int main(void) {
-  TPoro p(1, 1, 1, "rojo"), q(2, 2, 2, "verde");
-  TPoro r(1, 1, 1, "azul"), s(2, 2, 2, "granate");
-  TPoro t(1, 1, 1, "azul"), u(2, 2, 2, "granate");
+  TPoro p(1, 1, 1, (char *)"rojo"), q(2, 2, 1, (char *)"verde");
+  TPoro r(1, 1, 1, (char *)"azul"), s(2, 2, 1, (char *)"granate");
+  TPoro t(1, 1, 1, (char *)"blanco"), u(2, 2, 1, (char *)"granate");
 
   TPoro *arr = new TPoro[100];
-  TPoro *arr2 = new TPoro[100];
   TListaPoro a;
+
+  if (t != r) {
+    cout << "distintos" << endl;
+  }
+
+  TListaPosicion it = a.Primera();
+  it.Siguiente();
+  a.Obtener(it.Anterior());
+
+  // do {•••••••••
+  //   cout << a.Obtener(it) << " ";•••••••••
+  //   it = it.Siguiente();
+  // } while (!it.EsVacia());
+  // cout << endl;
+
+  a.Insertar(t);
+  cout << a << endl;
+  a.Borrar(t);
+  cout << a << endl;
 
   for (size_t i = 0; i < 100; i++) {
     arr[i] = TPoro(i * 3 + 1, i * 4, i);
-    // cout << TPoro(i * 3, i * 4, i) << endl;
     a.Insertar(arr[i]);
+    if (a.EsVacia() || a.Primera().EsVacia()) {
+      cout << "no debería de salir" << endl;
+    }
   }
-
-  a.Insertar(p);
-  cout << a << endl;
-
-  cout << "estoy" << endl;
-  a.Insertar(q);
-  cout << a << endl;
-  a.Insertar(s);
-  cout << a << endl;
-  // cout << a << endl;
-
   TListaPoro b(a);
-  b.Insertar(r);
 
   for (size_t i = 0; i < 100; i++) {
-    arr2[i] = TPoro(i * 3 + 1, i * 4, i);
-    // cout << TPoro(i * 3, i * 4, i) << endl;
-    // cout << "llego " << i << endl;
-    // cout << a << endl;
-    a.Borrar(arr2[i]);
-    b.Borrar(arr2[i]);
+    a.Borrar(arr[i]);
   }
 
-  // cout << a << endl;
+  it = b.Primera();
+  while (!it.EsVacia()) {
+    cout << b.Obtener(it) << " ";
+    it = it.Siguiente();
+  }
+  cout << endl;
+
+  it = b.Ultima();
+  while (!it.EsVacia()) {
+    cout << b.Obtener(it) << " ";
+    it = it.Anterior();
+  }
+  cout << endl;
+  cout << endl;
+  cout << endl;
+  cout << endl;
+
+  if (a == b) {
+    cout << "efectivamente, a es igual que b bien " << endl;
+  }
 
   if (b.Insertar(t)) {
-    cout << "se inserta" << endl;
+    cout << "se inserta (no debería)" << endl;
   }
 
-  // cout << b.Obtener(b.Primera()) << endl;
-  // cout << a.Obtener(a.Primera()) << endl;
-  // cout << b.Obtener(a.Primera()) << endl;
-
-  a.Primera().EsVacia(); // = a.EsVacia();
-  if (a.Primera().EsVacia()) {
-    cout << "primera a es vacía" << endl;
+  if (!(a.Primera().EsVacia())) {
+    cout << "primera de 'a' no es vacía" << endl;
   }
 
   cout << a << endl;
-  cout << b << endl;
-  cout << endl;
-  cout << endl;
-  cout << endl;
-  cout << endl;
+  a.Insertar(TPoro(10, 30, 2, (char *)"cián"));
+  TListaPoro n(a);
   cout << a << endl;
-  // cout << b << endl;
-
-  // cout << (a - b) << endl;
-
-  a.Insertar(TPoro(10, 30, 2, "cián"));
-  cout << a << endl;
-
-  cout << "aqui" << endl;
-  cout << a.ExtraerRango(2, 2) << endl;
-  cout << a << endl;
-  // if (b.Buscar(a.Obtener(a.Primera()))) {
-  //   cout << "encuentra" << endl;
-  // }
-
-  // cout << b << endl;
-  // cout << a << endl;
-  // cout << (a + b) << endl;
+  cout << a.ExtraerRango(1000, -102) << endl;
+  if (n == a) {
+    cout << "extraer fuera de rango no modifica a" << endl;
+  }
+  cout << a.ExtraerRango(1, 1) << endl;
+  n.Borrar(r);
+  if (n == a) {
+    cout << "extraer que si que modifica" << endl;
+  }
+  delete[] arr;
 }
