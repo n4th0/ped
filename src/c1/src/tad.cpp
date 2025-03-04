@@ -28,7 +28,7 @@ int main(void) {
 
   a.Insertar(t);
   cout << a << endl;
-  a.Borrar(t);
+  // a.Borrar(t);
   cout << a << endl;
 
   for (size_t i = 0; i < 100; i++) {
