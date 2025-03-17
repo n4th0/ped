@@ -17,7 +17,7 @@ public:
   bool operator!=(const TPoro &);
   void Posicion(int, int);
   void Volumen(double);
-  void Color(char *);
+  void Color(const char *);
   int PosicionX() const;
   int PosicionY() const;
   double Volumen() const;

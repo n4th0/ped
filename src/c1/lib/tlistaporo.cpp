@@ -273,7 +273,6 @@ bool TListaPoro::Insertar(const TPoro &poro) {
     return true;
   }
 
-  // TODO si es el primero quitar el igual y poner un if despues
   while (p->e.Volumen() <= poro.Volumen()) {
     p = p->siguiente;
   }
@@ -339,15 +338,6 @@ bool TListaPoro::Borrar(const TPoro &poro) {
 
     p = p->siguiente;
   }
-
-  // if (p->e == poro) { // no se si esto es necesario, no lo es
-  //   TListaNodo *anterior = p->anterior;
-  //   TListaNodo *siguiente = p->siguiente;
-  //   anterior->siguiente = siguiente;
-  //   siguiente->anterior = anterior;
-  //   p->~TListaNodo();
-  //   return true;
-  // }
 
   return false;
 }
@@ -456,7 +446,7 @@ TListaPoro TListaPoro::ExtraerRango(int n1, int n2) {
 
   while (!it.EsVacia() && count <= n2) {
 
-    cout << this->Obtener(it) << endl;
+    /*cout << this->Obtener(it) << endl;*/
     if (n1 <= count) {
       l.Insertar(this->Obtener(it));
       it2 = it.Siguiente();
