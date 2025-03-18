@@ -10,17 +10,17 @@ private:
   TPoro *datos;
   TPoro error;
 
-  TVectorPoro &copy(TVectorPoro &);
+  TVectorPoro &copy(const TVectorPoro &);
 
 public:
   TVectorPoro();
   ~TVectorPoro();
   TVectorPoro(int);
-  TVectorPoro(TVectorPoro &);
-  TVectorPoro &operator=(TVectorPoro &);
+  TVectorPoro(const TVectorPoro &);
+  TVectorPoro &operator=(const TVectorPoro &);
 
-  bool operator==(TVectorPoro &) const;
-  bool operator!=(TVectorPoro &) const;
+  bool operator==(const TVectorPoro &) const;
+  bool operator!=(const TVectorPoro &) const;
 
   TPoro &operator[](int);
   TPoro operator[](int) const;
@@ -29,7 +29,7 @@ public:
   int Cantidad() const;
   bool Redimensionar(int);
 
-  friend std::ostream &operator<<(std::ostream &, TVectorPoro &);
+  friend std::ostream &operator<<(std::ostream &, const TVectorPoro &);
 };
 
 #endif

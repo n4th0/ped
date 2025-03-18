@@ -32,48 +32,48 @@ TVectorPoro::TVectorPoro(int size) : error() {
   this->dimension = size;
 }
 
-TVectorPoro::TVectorPoro(TVectorPoro &vecporo) {
+TVectorPoro::TVectorPoro(const TVectorPoro &vecporo) {
 
   if (vecporo.dimension == 0) {
-    vecporo.datos = NULL;
-    vecporo.dimension = 0;
+    this->datos = NULL;
+    this->dimension = 0;
     return;
   }
 
   *this = copy(vecporo);
 }
 
-TVectorPoro &TVectorPoro::copy(TVectorPoro &vecporo) {
+TVectorPoro &TVectorPoro::copy(const TVectorPoro &vecporo) {
   TVectorPoro *n = new TVectorPoro();
 
-  n->dimension = vecporo.dimension;
-  n->datos = new TPoro[vecporo.dimension];
-  for (size_t i = 0; i < vecporo.dimension; i++) {
+  n->dimension = vecporo.Longitud();
+  n->datos = new TPoro[vecporo.Longitud()];
+  for (size_t i = 0; i < vecporo.Longitud(); i++) {
     n->datos[i] = vecporo.datos[i];
   }
 
   return *n;
 }
 
-TVectorPoro &TVectorPoro::operator=(TVectorPoro &vecporo) {
+TVectorPoro &TVectorPoro::operator=(const TVectorPoro &vecporo) {
 
   this->~TVectorPoro();
 
-  this->dimension = vecporo.dimension;
-  this->datos = new TPoro[vecporo.dimension];
-  for (size_t i = 0; i < vecporo.dimension; i++) {
+  this->dimension = vecporo.Longitud();
+  this->datos = new TPoro[vecporo.Longitud()];
+  for (size_t i = 0; i < vecporo.Longitud(); i++) {
     this->datos[i] = vecporo.datos[i];
   }
 
   return *this;
 }
 
-bool TVectorPoro::operator==(TVectorPoro &vecporo) const {
-  if (this->dimension != vecporo.dimension) {
+bool TVectorPoro::operator==(const TVectorPoro &vecporo) const {
+  if (this->dimension != vecporo.Longitud()) {
     return false;
   }
 
-  for (size_t i = 0; i < this->dimension; i++) {
+  for (size_t i = 0; i < this->Longitud(); i++) {
     if (this->datos[i] != vecporo.datos[i]) {
       return false;
     }
@@ -82,7 +82,7 @@ bool TVectorPoro::operator==(TVectorPoro &vecporo) const {
   return true;
 }
 
-bool TVectorPoro::operator!=(TVectorPoro &vecporo) const {
+bool TVectorPoro::operator!=(const TVectorPoro &vecporo) const {
   return !(*this == vecporo);
 }
 
@@ -129,19 +129,17 @@ bool TVectorPoro::Redimensionar(int size) {
 
   TPoro *arr = new TPoro[size];
 
-  if (size < dimension) {
-    for (size_t i = 0; i < size; i++) {
-      arr[i] = datos[i];
-    }
-  } else {
-    for (size_t i = 0; i < size; i++) {
-      arr[i] = datos[i];
-      if (i >= dimension) {
-        TPoro p = TPoro();
-        arr[i] = p;
-      }
-    }
-  }
+  int min;
+  // TODO hacer el min
+  if (size < dimension)
+    min = size;
+  else
+    min = dimension;
+  
+
+  for (size_t i = 0; i < min; i++)
+    arr[i] = datos[i];
+
 
   this->~TVectorPoro();
 
@@ -151,16 +149,16 @@ bool TVectorPoro::Redimensionar(int size) {
   return true;
 }
 
-std::ostream &operator<<(std::ostream &os, TVectorPoro &vecporo) {
-  if (vecporo.dimension == 0) {
+std::ostream &operator<<(std::ostream &os, const TVectorPoro &vecporo) {
+  if (vecporo.Longitud() == 0) {
     os << "[]";
     return os;
   }
 
   os << "[";
 
-  for (size_t i = 0; i < vecporo.dimension; i++) {
-    if (i == vecporo.dimension - 1) {
+  for (size_t i = 0; i < vecporo.Longitud(); i++) {
+    if (i == vecporo.Longitud() - 1) {
       os << i + 1 << " " << vecporo.datos[i];
     } else {
       os << i + 1 << " " << vecporo.datos[i] << " ";

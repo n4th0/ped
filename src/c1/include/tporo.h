@@ -8,7 +8,7 @@ class TPoro {
 
 public:
   TPoro();
-  TPoro(int, int, double, char *);
+  TPoro(int, int, double, const char *);
   TPoro(int, int, double);
   TPoro(const TPoro &);
   ~TPoro();

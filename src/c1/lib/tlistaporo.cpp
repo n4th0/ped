@@ -446,7 +446,6 @@ TListaPoro TListaPoro::ExtraerRango(int n1, int n2) {
 
   while (!it.EsVacia() && count <= n2) {
 
-    /*cout << this->Obtener(it) << endl;*/
     if (n1 <= count) {
       l.Insertar(this->Obtener(it));
       it2 = it.Siguiente();

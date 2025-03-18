@@ -20,15 +20,8 @@ int main(void) {
   it.Siguiente();
   a.Obtener(it.Anterior());
 
-  // do {•••••••••
-  //   cout << a.Obtener(it) << " ";•••••••••
-  //   it = it.Siguiente();
-  // } while (!it.EsVacia());
-  // cout << endl;
-
   a.Insertar(t);
   cout << a << endl;
-  // a.Borrar(t);
   cout << a << endl;
 
   for (size_t i = 0; i < 100; i++) {

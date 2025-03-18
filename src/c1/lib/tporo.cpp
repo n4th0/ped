@@ -22,7 +22,7 @@ TPoro::TPoro(int x, int y, double vol) {
   this->color = NULL;
 }
 
-TPoro::TPoro(int x, int y, double volumen, char *color) {
+TPoro::TPoro(int x, int y, double volumen, const char *color) {
   Color(color);
   this->volumen = volumen;
   this->x = x;
@@ -42,6 +42,9 @@ TPoro::~TPoro() {
     delete[] this->color;
     this->color = NULL;
   }
+  y = 0;
+  x = 0;
+  volumen = 0;
 }
 
 TPoro &TPoro::operator=(const TPoro &p) {

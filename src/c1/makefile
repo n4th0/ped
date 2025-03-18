@@ -22,12 +22,12 @@ tad:  tporo.o tvectorporo.o tlistaporo.o ./src/tad.cpp
 
 run:  ./src/tad.cpp tad tlistaporo.o tvectorporo.o tporo.o
 	@#valgrind -q --leak-check=full --tool=memcheck ./tad
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./tad
+	@valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes ./tad
 	@#valgrind -q --tool=memcheck ./tad
 	@# ./tad
 
 tar: ./include ./lib ./src nombres.txt
-	tar cvfz cuad1.tgz ./include ./lib ./src nombres.txt
+	tar cvzf cuad1.tgz include lib src nombres.txt
 
  #--track-origins=yes --leak-check=full
 
