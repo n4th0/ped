@@ -4,7 +4,9 @@ using namespace std;
 
 #include "tporo.h"
 
-int main(void) {
+int
+main(void)
+{
   TPoro a(1, 2, 3, "rojo");
   TPoro b;
 

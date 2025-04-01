@@ -5,7 +5,9 @@ using namespace std;
 #include "tporo.h"
 #include "tvectorporo.h"
 
-int main(void) {
+int
+main(void)
+{
   TPoro a, b, c;
   TVectorPoro d, e, f;
 
