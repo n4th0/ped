@@ -1,5 +1,6 @@
 #include "../include/tabbporo.h"
 #include <iostream>
+#include <queue>
 
 /////////////////////////////
 // TABBPoro
@@ -224,7 +225,32 @@ int TABBPoro::NodosHoja() const {
   return nodo->de.NodosHoja() + nodo->iz.NodosHoja();
 }
 
-TVectorPoro TABBPoro::Niveles() const {}
+TVectorPoro TABBPoro::Niveles() const {
+
+  queue<TABBPoro> queue;
+
+  TVectorPoro v(this->Nodos());
+  TABBPoro abb = *this;
+  queue.push(abb);
+  int i = 1;
+
+  while (!queue.empty()) {
+    abb = queue.front();
+    v[i] = abb.nodo->item;
+
+    if (!abb.nodo->iz.EsVacio()) {
+      queue.push(abb.nodo->iz);
+    }
+    if (!abb.nodo->de.EsVacio()) {
+      queue.push(abb.nodo->de);
+    }
+    i++;
+
+    queue.pop();
+  }
+
+  return v;
+}
 
 TVectorPoro TABBPoro::Inorden() const {
   int posicion = 1;
@@ -273,7 +299,11 @@ TABBPoro TABBPoro::operator-(const TABBPoro &arb) {
   return a;
 }
 
-ostream &operator<<(ostream &, const TABBPoro &) {}
+ostream &operator<<(ostream &os, const TABBPoro &abb) {
+  TVectorPoro v = abb.Niveles();
+  os << v;
+  return os;
+}
 
 /////////////////////////////
 // T TNodoABB

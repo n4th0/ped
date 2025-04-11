@@ -44,9 +44,11 @@ int main(void) {
   cout << "NodosHoja: " << a.NodosHoja() << endl;
   cout << "Raiz: " << a.Raiz() << endl;
 
-  a.Borrar(p20);
+  // a.Borrar(p20);
   cout << "Altura: " << a.Altura() << endl;
   cout << "Nodos: " << a.Nodos() << endl;
   cout << "NodosHoja: " << a.NodosHoja() << endl;
   cout << "Raiz: " << a.Raiz() << endl;
+  a.paint("", true);
+  cout << a << endl;
 }
