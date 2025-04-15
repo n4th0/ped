@@ -17,7 +17,6 @@ private:
   void InordenAux(TVectorPoro &, int &) const;
   void PreordenAux(TVectorPoro &, int &) const;
   void PostordenAux(TVectorPoro &, int &) const;
-  TABBPoro antecesor(const TPoro &) const;
 
 public:
   TABBPoro();

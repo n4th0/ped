@@ -6,49 +6,18 @@ using namespace std;
 #include "../include/tporo.h"
 #include "../include/tvectorporo.h"
 
-int main(void) {
+int main(void)
+{
 
-  TABBPoro a;
+  TABBPoro a,b,c;
 
-  TPoro p100(1, 2, 100, (char *)"rojo");
-  TPoro p50(1, 2, 50, (char *)"rojo");
-  TPoro p20(1, 2, 20, (char *)"rojo");
-  TPoro p110(1, 2, 110, (char *)"rojo");
+  TPoro p1(1,2,1,(char *) "rojo");
 
-  cout << "Altura: " << a.Altura() << endl;
-  cout << "Nodos: " << a.Nodos() << endl;
-  cout << "NodosHoja: " << a.NodosHoja() << endl;
-  cout << "Raiz: " << a.Raiz() << endl;
+  b.Insertar(p1);
 
-  a.Insertar(p100);
-  cout << "Altura: " << a.Altura() << endl;
-  cout << "Nodos: " << a.Nodos() << endl;
-  cout << "NodosHoja: " << a.NodosHoja() << endl;
-  cout << "Raiz: " << a.Raiz() << endl;
 
-  a.Insertar(p50);
-  cout << "Altura: " << a.Altura() << endl;
-  cout << "Nodos: " << a.Nodos() << endl;
-  cout << "NodosHoja: " << a.NodosHoja() << endl;
-  cout << "Raiz: " << a.Raiz() << endl;
+  cout << (a = b).Inorden() << endl;
 
-  a.Insertar(p20);
-  cout << "Altura: " << a.Altura() << endl;
-  cout << "Nodos: " << a.Nodos() << endl;
-  cout << "NodosHoja: " << a.NodosHoja() << endl;
-  cout << "Raiz: " << a.Raiz() << endl;
+  cout << (a = c).Inorden() << endl;
 
-  a.Insertar(p110);
-  cout << "Altura: " << a.Altura() << endl;
-  cout << "Nodos: " << a.Nodos() << endl;
-  cout << "NodosHoja: " << a.NodosHoja() << endl;
-  cout << "Raiz: " << a.Raiz() << endl;
-
-  // a.Borrar(p20);
-  cout << "Altura: " << a.Altura() << endl;
-  cout << "Nodos: " << a.Nodos() << endl;
-  cout << "NodosHoja: " << a.NodosHoja() << endl;
-  cout << "Raiz: " << a.Raiz() << endl;
-  a.paint("", true);
-  cout << a << endl;
 }

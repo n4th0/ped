@@ -4,52 +4,33 @@
 
 if [[ $1 == "" ]]; then
   echo "opciones:"
-  echo " - tporo"
-  echo " - tvector"
-  echo " - tlista"
+  echo " - tabbporo"
   exit 1
 fi
 
-if [[ $1 != "tporo" && $1 != "tvector" && $1 != "tlista" ]]; then
+if [[ $1 != "tabbporo" ]]; then
   echo "opciones: "
-  echo "tporo"
-  echo "tvector"
-  echo "tlista"
-  echo "aqui"
+  echo "tabbporo"
 
   exit 1
 fi
 
 make all
 
-if [[ $1 == "tporo" ]]; then
+if [[ $1 == "tabbporo" ]]; then
   num=11
-  name="tporo"
-  # lib=""
-  src="./tporo.o"
+  name="tabbporo"
+  src="./tabbporo.o ./tporo.o ./tvectorporo.o"
   make test >/dev/null
-fi
-
-if [[ $1 == "tvector" ]]; then
-  name="tvectorporo"
-  num=9
-  # lib="./include/tporo.h ./include/tvectorporo.h"
-  make test >/dev/null
-  src="./tvectorporo.o ./tporo.o"
-fi
-
-if [[ $1 == "tlista" ]]; then
-  name="tlistaporo"
-  num=13
-  # lib="./include/tporo.h ./include/tvectorporo.h"
-  make test >/dev/null
-  src="./tlistaporo.o ./tporo.o"
 fi
 
 for ((i = 1; i < $num; i++)); do
+  if [[ $i == 2 || $i == 4 || $i == 12 || $i == 13 || $i == 14 || $i == 15 ]]; then
+    continue
+  fi
 
-  test="./"$name"/tad"
-  solu="./"$name"/tad"
+  test="./"$name"/TABBPoro-"
+  solu="./"$name"/TABBPoro-"
 
   if [[ i -lt 10 ]]; then
     test=$test"0$i.o"
@@ -63,6 +44,7 @@ for ((i = 1; i < $num; i++)); do
 
   g++ -w $test $src -o tad
   valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes ./tad >/tmp/salida 2>/tmp/salida-valgrind
+  # ./tad >/tmp/salida 2>/tmp/salida-valgrind
   # --leak-check=full
 
   diff /tmp/salida $solu

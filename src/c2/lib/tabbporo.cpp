@@ -6,28 +6,6 @@
 // TABBPoro
 /////////////////////////////
 
-// devuelve un tabbporo vacío en caso de que no esté el tporo
-// si solo está ese tporo devuelve el mismo arbol
-// si no, devuelve el antecesor directo del poro a borrar
-TABBPoro TABBPoro::antecesor(const TPoro &p) const {
-  if (this->EsVacio()) {
-    return TABBPoro();
-  }
-
-  if (nodo->item == p) {
-    return *this;
-  }
-
-  if (nodo->de.nodo->item == p || nodo->iz.nodo->item == p) {
-    return *this;
-  }
-
-  if (p.Volumen() < this->nodo->item.Volumen()) {
-    return this->nodo->iz.antecesor(p);
-  } else {
-    return this->nodo->de.antecesor(p);
-  }
-}
 
 void TABBPoro::InordenAux(TVectorPoro &v, int &pos) const {
   if (!this->EsVacio()) {
@@ -59,7 +37,6 @@ void TABBPoro::PostordenAux(TVectorPoro &v, int &pos) const {
 TABBPoro::TABBPoro() : nodo(NULL) {}
 
 TABBPoro::TABBPoro(const TABBPoro &arb) {
-  this->~TABBPoro();
 
   if (arb.EsVacio()) {
     return;
@@ -68,7 +45,15 @@ TABBPoro::TABBPoro(const TABBPoro &arb) {
   this->nodo = new TNodoABB(*arb.nodo);
 }
 
-TABBPoro::~TABBPoro() {}
+TABBPoro::~TABBPoro() {
+
+  if (nodo != NULL) {
+    // nodo->~TNodoABB();
+    delete nodo;
+    nodo = NULL;
+  }
+
+}
 
 TABBPoro &TABBPoro::operator=(const TABBPoro &tabb) {
   this->~TABBPoro();
@@ -116,7 +101,7 @@ bool TABBPoro::Insertar(const TPoro &p) {
     return nodo->iz.Insertar(p);
   }
 
-  return false; // same volumen
+  return false;
 }
 
 void TABBPoro::paint(const string &prefix, bool isLeft) {
