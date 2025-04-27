@@ -24,7 +24,7 @@ run:  ./src/tad.cpp tad tvectorporo.o tporo.o
 	@ ./tad
 
 tar: ./include ./lib ./src nombres.txt
-	tar cvzf cuad1.tgz include lib src nombres.txt
+	tar cvzf cuad2.tgz include lib src nombres.txt
 
  #--track-origins=yes --leak-check=full
 

@@ -6,7 +6,6 @@
 // TABBPoro
 /////////////////////////////
 
-
 void TABBPoro::InordenAux(TVectorPoro &v, int &pos) const {
   if (!this->EsVacio()) {
     nodo->iz.InordenAux(v, pos);
@@ -52,7 +51,6 @@ TABBPoro::~TABBPoro() {
     delete nodo;
     nodo = NULL;
   }
-
 }
 
 TABBPoro &TABBPoro::operator=(const TABBPoro &tabb) {
@@ -104,19 +102,18 @@ bool TABBPoro::Insertar(const TPoro &p) {
   return false;
 }
 
-void TABBPoro::paint(const string &prefix, bool isLeft) {
-  if (!this->EsVacio()) {
-    cout << prefix;
-    cout << (isLeft ? "├──" : "└──");
-    cout << this->nodo->item.Volumen() << endl;
-    this->nodo->iz.paint(prefix + (isLeft ? "│   " : "    "), true);
-    this->nodo->de.paint(prefix + (isLeft ? "│   " : "    "), false);
-  }
-}
+// void TABBPoro::paint(const string &prefix, bool isLeft) {
+//   if (!this->EsVacio()) {
+//     cout << prefix;
+//     cout << (isLeft ? "├──" : "└──");
+//     cout << this->nodo->item.Volumen() << endl;
+//     this->nodo->iz.paint(prefix + (isLeft ? "│   " : "    "), true);
+//     this->nodo->de.paint(prefix + (isLeft ? "│   " : "    "), false);
+//   }
+// }
 
 bool TABBPoro::Borrar(const TPoro &poro) {
-
-  if (!this->Buscar(poro)) {
+  if (this->EsVacio()) {
     return false;
   }
 
@@ -126,16 +123,25 @@ bool TABBPoro::Borrar(const TPoro &poro) {
     return nodo->de.Borrar(poro);
   }
 
-  // está bien esta parte
+  if (poro.Volumen() != this->nodo->item.Volumen()) {
+    return false;
+  }
+
   if (this->nodo->de.EsVacio() && this->nodo->iz.EsVacio()) {
-    this->nodo->item.~TPoro();
-    this->nodo = NULL;
+    if (this->nodo != NULL) {
+      delete this->nodo;
+      this->nodo = NULL;
+    }
     return true;
   }
 
-  // está bien esta parte
   if (!this->nodo->de.EsVacio() && this->nodo->iz.EsVacio()) {
     this->nodo = this->nodo->de.nodo;
+    return true;
+  }
+
+  if (this->nodo->de.EsVacio() && !this->nodo->iz.EsVacio()) {
+    this->nodo = this->nodo->iz.nodo;
     return true;
   }
 
@@ -147,13 +153,18 @@ bool TABBPoro::Borrar(const TPoro &poro) {
     it = it->de.nodo;
   }
 
+  TPoro aux = this->nodo->item;
   this->nodo->item = it->item;
 
-  if (!it->iz.EsVacio()) {
-    it2->nodo = it2->nodo->iz.nodo;
-  } else {
-    it2->nodo = NULL;
-  }
+  this->nodo->iz.Borrar(this->nodo->item);
+
+  // if (!it->iz.EsVacio()) {
+  //   TABBPoro arb = it2->nodo->de;
+  //   it2->nodo = it2->nodo->iz.nodo;
+  //   it2->nodo->de = arb;
+  // } else {
+  //   it2->nodo = NULL;
+  // }
 
   return true;
 }
