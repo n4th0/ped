@@ -82,8 +82,10 @@ void TPoro::Posicion(int x, int y) {
 void TPoro::Volumen(double vol) { this->volumen = vol; }
 
 void TPoro::Color(const char *col) {
+
   if (this->color != NULL) {
     delete[] this->color;
+    this->color = NULL;
   }
 
   if (col != NULL) {

@@ -18,6 +18,7 @@ int main(void)
   TPoro p5(1,2,12,(char *) "rojo");
   TPoro p6(1,2,26,(char *) "rojo");
   TPoro p7(1,2,28,(char *) "rojo");
+
   TPoro p8(1,2,11,(char *) "rojo");
 
   a.Insertar(p1);
@@ -28,40 +29,50 @@ int main(void)
   a.Insertar(p6);
   a.Insertar(p7);
 
-  a.paint("", true);
-  cout << "-------------------------"<< endl;
+  TABBPoro b(a);
+  TABBPoro c = a;
 
-  if(!a.Borrar(p1))
-  	cout << "Error NO BORRADO" << endl;
-  a.paint("", true);
-  cout << p1 <<endl;
-  cout << "-------------------------"<< endl;
+  cout << a.Niveles() << endl;
 
-  if(!a.Borrar(p5))
-  	cout << "Error NO BORRADO" << endl;
-  a.paint("", true);
-  cout << p5 <<endl;
-  cout << "-------------------------"<< endl;
+  cout << b.Niveles() << endl;
+  cout << c.Niveles() << endl;
 
-  if(!a.Borrar(p8))
-  	cout << "Error NO BORRADO" << endl;
-  a.paint("", true);
-  cout << p8 <<endl;
-  cout << "-------------------------"<< endl;
 
   if(!a.Borrar(p2))
   	cout << "Error NO BORRADO" << endl;
-  a.paint("", true);
-  cout << p2 <<endl;
-  cout << "-------------------------"<< endl;
+
+  if(!b.Borrar(p2))
+  	cout << "Error NO BORRADO" << endl;
+
+  if(!c.Borrar(p2))
+  	cout << "Error NO BORRADO" << endl;
+
+
+  cout << a.Inorden() << endl;
+  cout << b.Inorden() << endl;
+  cout << c.Inorden() << endl;
+
+  cout << a.Postorden() << endl;
+  cout << b.Postorden() << endl;
+  cout << c.Postorden() << endl;
+
+  if(!a.Borrar(p1))
+  	cout << "Error NO BORRADO" << endl;
+
+  if(!a.Borrar(p5))
+  	cout << "Error NO BORRADO" << endl;
+
+  // if(!a.Borrar(p8))
+  // 	cout << "Error NO BORRADO" << endl;
+  // cout << p8 <<endl;
+  // cout << "-------------------------"<< endl;
 
   if(!a.Borrar(p4))
   	cout << "Error NO BORRADO" << endl;
 
-  a.paint("", true);
-  cout << p4 <<endl;
-  cout << "-------------------------"<< endl;
 
   cout << a.Inorden() << endl;
+  cout << b.Inorden() << endl;
+  cout << c.Inorden() << endl;
 
 }
