@@ -33,24 +33,27 @@ void TABBPoro::PostordenAux(TVectorPoro &v, int &pos) const {
   }
 }
 
-TABBPoro::TABBPoro() : nodo(NULL) {}
+TABBPoro::TABBPoro() { nodo = NULL;}
 
 TABBPoro::TABBPoro(const TABBPoro &arb) {
+  // this->~TABBPoro();
 
   if (arb.EsVacio()) {
     return;
   }
 
-  this->nodo = new TNodoABB(*arb.nodo);
+  this->nodo = new TNodoABB();
+  this->nodo->item = arb.nodo->item;
+  this->nodo->iz = arb.nodo->iz;
+  this->nodo->de = arb.nodo->de;
 }
 
 TABBPoro::~TABBPoro() {
 
   if (nodo != NULL) {
-    // nodo->~TNodoABB();
     delete nodo;
-    nodo = NULL;
   }
+  nodo = NULL;
 }
 
 TABBPoro &TABBPoro::operator=(const TABBPoro &tabb) {
@@ -66,6 +69,7 @@ TABBPoro &TABBPoro::operator=(const TABBPoro &tabb) {
 }
 
 bool TABBPoro::operator==(const TABBPoro &arb) const {
+
   if (this->EsVacio() && arb.EsVacio()) {
     return true;
   }
@@ -73,8 +77,19 @@ bool TABBPoro::operator==(const TABBPoro &arb) const {
     return false;
   }
 
-  return (arb.nodo->item == this->nodo->item &&
-          arb.nodo->de == this->nodo->de && arb.nodo->iz == this->nodo->iz);
+  if (this->Nodos() != arb.Nodos()) {
+    return false;
+  }
+
+  TVectorPoro v = this->Inorden();
+
+  for (int i = 1; i <= v.Cantidad(); i++) {
+    if (!arb.Buscar(v[i])) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 bool TABBPoro::EsVacio() const { return (nodo == NULL); }
@@ -221,19 +236,60 @@ int TABBPoro::NodosHoja() const {
   return nodo->de.NodosHoja() + nodo->iz.NodosHoja();
 }
 
+// TVectorPoro TABBPoro::Niveles() const {
+//   TVectorPoro resultado(this->Nodos());
+//   if (this->EsVacio()) return resultado;
+//   queue<TABBPoro> cola;
+//   cola.push(*this);
+//   int indice = 1;
+//   while (!cola.empty() && indice <= resultado.Longitud()) {
+//     TABBPoro actual = cola.front();
+//     cola.pop();
+//     resultado[indice] = actual.Raiz();
+//     if (!actual.nodo->iz.EsVacio())
+//       cola.push(actual.nodo->iz);
+//     if (!actual.nodo->de.EsVacio())
+//       cola.push(actual.nodo->de);
+//     indice++;
+//   }
+//   return resultado;
+// }
+
+// TVectorPoro TABBPoro::Niveles() const {
+//   int total = this->Nodos();
+//   TVectorPoro resultado(total);
+//   if (this->EsVacio())
+//     return resultado;
+//   std::vector<TABBPoro> cola;
+//   cola.push_back(*this);
+//   int i = 1; // índice en resultado
+//   int j = 0; // índice en la "cola"
+//   while (j < cola.size() && i <= total) {
+//     TABBPoro actual = cola[j];
+//     resultado[i] = actual.Raiz();
+//     if (!actual.nodo->iz.EsVacio()) {
+//       cola.push_back(actual.nodo->iz);
+//     }
+//     if (!actual.nodo->de.EsVacio()) {
+//       cola.push_back(actual.nodo->de);
+//     }
+//     i++;
+//     j++; // avanzamos al siguiente nodo
+//   }
+//   return resultado;
+// }
+
 TVectorPoro TABBPoro::Niveles() const {
-
   queue<TABBPoro> queue;
-
   TVectorPoro v(this->Nodos());
   TABBPoro abb = *this;
   queue.push(abb);
   int i = 1;
-
+  // cout << "";
   while (!queue.empty()) {
+  // cout << "algo" << endl;
     abb = queue.front();
-    v[i] = abb.nodo->item;
-
+    v[i] = abb.Raiz();
     if (!abb.nodo->iz.EsVacio()) {
       queue.push(abb.nodo->iz);
     }
@@ -241,10 +297,8 @@ TVectorPoro TABBPoro::Niveles() const {
       queue.push(abb.nodo->de);
     }
     i++;
-
     queue.pop();
   }
-
   return v;
 }
 
@@ -311,9 +365,12 @@ TNodoABB::TNodoABB(const TNodoABB &n) : item(n.item), iz(n.iz), de(n.de) {}
 TNodoABB::~TNodoABB() {}
 
 TNodoABB &TNodoABB::operator=(const TNodoABB &n) {
-  item = n.item;
-  de = n.de;
-  iz = n.iz;
+  if (this != &n) {
+    this->~TNodoABB();
+    item = n.item;
+    de = n.de;
+    iz = n.iz;
+  }
 
   return *this;
 }

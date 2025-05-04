@@ -39,9 +39,10 @@ TPoro::TPoro(const TPoro &p) {
 
 TPoro::~TPoro() {
   if (this->color != NULL) {
-    delete[] this->color;
+    // delete[] this->color;
     this->color = NULL;
   }
+
   y = 0;
   x = 0;
   volumen = 0;
@@ -83,7 +84,7 @@ void TPoro::Volumen(double vol) { this->volumen = vol; }
 
 void TPoro::Color(const char *col) {
   if (this->color != NULL) {
-    delete[] this->color;
+    // delete[] this->color;
   }
 
   if (col != NULL) {
