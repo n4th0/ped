@@ -30,7 +30,7 @@ main(void)
   if( b.Inorden() == c.Inorden() )
         cout << "MAL! SE HAN COPIADO PUNTEROS" << endl;
   else
-	cout << "CORRECTA ASIGNACION" << endl;
+	cout << "CORRECTA ASIGNACION " << endl;
 
   return 1;
 }
