@@ -39,7 +39,7 @@ public:
   TVectorPoro Postorden() const;
   TABBPoro operator+(const TABBPoro &);
   TABBPoro operator-(const TABBPoro &);
-  // void paint(const string &prefix, bool isLeft);
+  void paint(const string &prefix, bool isLeft);
 
   friend ostream &operator<<(ostream &, const TABBPoro &);
 };

@@ -117,15 +117,15 @@ bool TABBPoro::Insertar(const TPoro &p) {
   return false;
 }
 
-// void TABBPoro::paint(const string &prefix, bool isLeft) {
-//   if (!this->EsVacio()) {
-//     cout << prefix;
-//     cout << (isLeft ? "├──" : "└──");
-//     cout << this->nodo->item.Volumen() << endl;
-//     this->nodo->iz.paint(prefix + (isLeft ? "│   " : "    "), true);
-//     this->nodo->de.paint(prefix + (isLeft ? "│   " : "    "), false);
-//   }
-// }
+void TABBPoro::paint(const string &prefix, bool isLeft) {
+  if (!this->EsVacio()) {
+    cout << prefix;
+    cout << (isLeft ? "├──" : "└──");
+    cout << this->nodo->item.Volumen() << endl;
+    this->nodo->iz.paint(prefix + (isLeft ? "│   " : "    "), true);
+    this->nodo->de.paint(prefix + (isLeft ? "│   " : "    "), false);
+  }
+}
 
 bool TABBPoro::Borrar(const TPoro &poro) {
   if (this->EsVacio()) {
